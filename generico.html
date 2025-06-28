@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario de Productos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Definición de variables CSS globales (opcional, pero buena práctica) */
+        :root {
+            --primary-color: #4a90e2; /* Azul vibrante */
+            --secondary-color: #2c3e50; /* Azul oscuro */
+            --accent-color: #e28e4a; /* Naranja/Ámbar de acento */
+            --white: #ffffff;
+            --light-gray: #f4f7f6;
+            --text-color: #333;
+            --border-radius: 8px;
+            --shadow-light: 0 4px 10px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* --- General Body & Container Styles --- */
+        body {
+            font-family: 'Open Sans', sans-serif; /* Fuente más moderna y legible */
+            margin: 0;
+            padding: 20px;
+            background-color: var(--light-gray); /* Fondo suave usando variable */
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centra el contenido horizontalmente */
+            min-height: 100vh; /* Asegura que ocupe al menos la altura de la ventana */
+        }
+
+        h1 {
+            color: var(--secondary-color); /* Un azul oscuro */
+            font-family: 'Roboto', sans-serif; /* Fuente para los títulos */
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-container {
+            width: 95%; /* Ocupa casi todo el ancho disponible */
+            max-width: 1300px; /* Ancho máximo para pantallas grandes */
+            overflow-x: auto; /* Permite desplazamiento horizontal si la tabla es muy ancha */
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-medium); /* Sombra más pronunciada */
+            padding: 20px;
+        }
+
+        /* --- Table Styles --- */
+        table {
+            width: 100%;
+            border-collapse: separate; /* Permite border-spacing */
+            border-spacing: 0; /* Elimina espacio entre celdas */
+            margin: 0 auto;
+            font-size: 0.95em;
+            text-align: left;
+            background-color: var(--white);
+            border-radius: 10px; /* Bordes redondeados para la tabla misma */
+            overflow: hidden; /* Asegura que los bordes redondeados se apliquen bien */
+        }
+
+        thead th {
+            background-color: var(--primary-color); /* Azul vibrante para el encabezado */
+            color: white;
+            padding: 15px 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #3a7bd5; /* Borde inferior más oscuro */
+            position: sticky; /* Encabezado pegajoso al hacer scroll */
+            top: 0;
+            z-index: 10; /* Asegura que esté por encima del contenido al hacer scroll */
+        }
+
+        tbody tr {
+            transition: background-color 0.3s ease; /* Transición suave al pasar el mouse */
+        }
+
+        tbody tr:nth-child(even) { /* Efecto de filas alternas (cebra) */
+            background-color: #f9f9f9; /* Gris muy claro para filas pares */
+        }
+
+        tbody tr:hover {
+            background-color: #e0f2f7; /* Un azul muy claro al pasar el mouse */
+        }
+
+        tbody td { /* Cambiado de 'th' a 'td' para las celdas de datos */
+            padding: 12px 10px;
+            border-bottom: 1px solid #eee; /* Línea divisoria suave */
+            vertical-align: middle; /* Alineación vertical del contenido */
+        }
+
+        /* Estilos para los campos de input dentro de la tabla */
+        tbody input[type="text"],
+        tbody input[type="number"],
+        tbody input[type="date"] {
+            width: calc(100% - 10px); /* Ocupa casi todo el ancho de la celda */
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 0.9em;
+            box-sizing: border-box; /* Incluye padding y border en el ancho total */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        tbody input:focus {
+            border-color: var(--primary-color); /* Borde azul al enfocar */
+            box-shadow: 0 0 5px rgba(74, 144, 226, 0.5); /* Sombra suave al enfocar */
+            outline: none; /* Elimina el contorno por defecto del navegador */
+        }
+
+        /* Estilos para el placeholder */
+        tbody input::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* --- Table Header (for Title and Back Button) --- */
+        .table-header {
+            width: 95%; /* Mismo ancho que el contenedor de la tabla */
+            max-width: 1300px; /* Mismo ancho máximo */
+            display: flex; /* Para alinear el título y el botón */
+            justify-content: space-between; /* Espacio entre el título y el botón */
+            align-items: center; /* Centra verticalmente */
+            margin-bottom: 20px; /* Espacio debajo del encabezado */
+            padding: 0 10px; /* Pequeño padding a los lados */
+        }
+
+        .table-header h1 {
+            margin: 0; /* Elimina el margen por defecto del h1 */
+        }
+
+        /* --- Button Container (for Save and Clear) --- */
+        .button-container {
+            margin-top: 30px; /* Espacio encima de los botones */
+            margin-bottom: 50px; /* Espacio debajo (si hay un footer, etc.) */
+            display: flex; /* Para que los botones estén uno al lado del otro */
+            gap: 20px; /* Espacio entre los botones */
+            justify-content: center; /* Centra los botones */
+            width: 95%; /* Mismo ancho que el contenedor de la tabla */
+            max-width: 1300px;
+        }
+
+        /* --- General Action Button Styles --- */
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 28px;
+            font-size: 1.1em;
+            font-weight: 600;
+            text-decoration: none; /* Quita el subrayado de los enlaces */
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+        }
+
+        /* --- Specific Button Styles --- */
+        /* Primary Button (for Save and Print) */
+        .primary-button {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .primary-button:hover {
+            background-color: #3a7bd5; /* Tono más oscuro de primary-color */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .primary-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Secondary Button (for Clear and Back) */
+        .secondary-button {
+            background-color: var(--white);
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
+        }
+
+        .secondary-button:hover {
+            background-color: var(--secondary-color);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .secondary-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+                margin-bottom: 20px;
+            }
+
+            .table-container {
+                width: 100%;
+                padding: 10px;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            table {
+                font-size: 0.85em; /* Reduce tamaño de fuente en pantallas pequeñas */
+            }
+
+            thead th, tbody td {
+                padding: 10px 5px;
+            }
+
+            /* Ocultar algunas columnas para ahorrar espacio en móviles (opcional) */
+            /* Puedes decidir cuáles son las menos importantes para ocultar */
+            /* Ejemplo:
+            tbody td:nth-child(4), /* Columna Cantidad */
+            thead th:nth-child(4) {
+                display: none;
+            }
+            */
+
+            .table-header {
+                flex-direction: column; /* Apila el título y el botón "Volver" */
+                align-items: flex-start; /* Alinea a la izquierda en columna */
+                margin-bottom: 15px;
+                padding: 0 15px; /* Ajusta padding para móviles */
+            }
+
+            .table-header h1 {
+                font-size: 2em;
+                margin-bottom: 10px; /* Espacio entre el título y el botón */
+            }
+
+            /* Los botones de acción se apilan y ocupan todo el ancho */
+            .action-button {
+                width: 100%;
+                max-width: 300px; /* Controla el ancho máximo en pantallas intermedias */
+                font-size: 1em;
+                padding: 12px 20px;
+            }
+
+            .inventory-page-actions { /* Nuevo contenedor para Imprimir y Volver */
+                flex-direction: column;
+                gap: 15px;
+                margin-top: 25px;
+                margin-bottom: 25px;
+            }
+
+            .button-container {
+                flex-direction: column; /* Apila los botones de acción (Guardar/Limpiar) */
+                gap: 15px;
+                width: 100%; /* Ocupa todo el ancho */
+                padding: 0 15px; /* Añade padding para no pegarse a los bordes */
+            }
+        }
+
+        /* --- Estilos específicos para impresión (ocultar elementos no deseados) --- */
+        @media print {
+            .inventory-page-actions, /* Oculta los botones de Imprimir/Volver */
+            .table-header h2, /* Oculta los subtítulos de la tabla */
+            .table-header h4,
+            .button-container { /* Oculta los botones Guardar/Limpiar */
+                display: none !important;
+            }
+
+            body {
+                padding: 0;
+                margin: 0;
+                background-color: white;
+            }
+
+            .table-container {
+                box-shadow: none;
+                border-radius: 0;
+                padding: 0;
+                width: 100%;
+                max-width: none;
+                overflow-x: visible; /* Asegura que no haya scroll horizontal al imprimir */
+            }
+
+            table {
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            thead th {
+                background-color: #f0f0f0 !important; /* Fondo más claro para impresión */
+                color: #333 !important;
+                -webkit-print-color-adjust: exact; /* Para que el color de fondo se imprima */
+                print-color-adjust: exact;
+                border: 1px solid #ddd;
+            }
+
+            tbody td {
+                border: 1px solid #ddd;
+            }
+
+            tbody tr:nth-child(even) {
+                background-color: #f8f8f8 !important; /* Fondo alterno más claro */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* Asegura que los inputs se muestren como texto plano */
+            tbody input {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                width: auto !important;
+                box-shadow: none !important;
+                outline: none !important;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="inventory-page-actions">
+        <button id="printButton" class="action-button primary-button">Imprimir Pantalla</button>
+        <a href="index.html" class="action-button secondary-button">Volver a inventaap</a>
+    </div>
+
+    <div class="table-header">
+        <h1>Inventario</h1>
+    </div>
+    <h2>agrega valores a la primer fila de columnas </h2>
+    <h4>ejemplo fecha,producto,peso,cantidad,marca,codigo</h4>
+    
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th><input type="text" placeholder="Fecha"></th> 
+                    <th><input type="text" placeholder="Producto"></th> 
+                    <th><input type="text" placeholder="Peso"></th> 
+                    <th><input type="text" placeholder="Cantidad"></th> 
+                    <th><input type="text" placeholder="Marca"></th> 
+                    <th><input type="text" placeholder="Código"></th> 
+                    <th><input type="text" placeholder="Observaciones"></th> </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="date" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                </tr>
+                <tr>
+                    <td><input type="date" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                </tr>
+                <tr>
+                    <td><input type="date" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                </tr>
+                <tr>
+                    <td><input type="date" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                </tr>
+                <tr>
+                    <td><input type="date" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                </tr>
+                <tr>
+                    <td><input type="date" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                </tr>
+                <tr>
+                    <td><input type="date" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                </tr>
+                <tr>
+                    <td><input type="date" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                </tr>
+                <tr>
+                    <td><input type="date" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                </tr>
+                <tr>
+                    <td><input type="date" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                </tr>
+                <tr>
+                    <td><input type="date" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                </tr>
+                <tr>
+                    <td><input type="date" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                </tr>
+                <tr>
+                    <td><input type="date" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                </tr>
+                <tr>
+                    <td><input type="date" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                </tr>
+                <tr>
+                    <td><input type="date" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="number" placeholder=""></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                    <td><input type="text" placeholder=" "></td> 
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="button-container">
+        <button class="action-button save-button">Guardar Inventario</button>
+        <button class="action-button clear-button">Limpiar Inventario</button>
+    </div>
+
+    <script>
+        // === Funcionalidad de Impresión de Página ===
+        function imprimirPagina() {
+            window.print();
+        }
+
+        const printButton = document.getElementById('printButton');
+        if (printButton) {
+            printButton.addEventListener('click', imprimirPagina);
+        }
+
+        // === Funcionalidad del Menú Hamburguesa (si aplica, mantener en index.html) ===
+        // const menuToggle = document.querySelector('.menu-toggle');
+        // const sidebarLeft = document.querySelector('.sidebar-left');
+        // const body = document.body;
+        // if (menuToggle && sidebarLeft) {
+        //     menuToggle.addEventListener('click', () => {
+        //         body.classList.toggle('menu-open');
+        //     });
+        // }
+
+        // === Funcionalidad para Guardar y Limpiar Inventario ===
+        const saveButton = document.querySelector('.save-button');
+        const clearButton = document.querySelector('.clear-button');
+        const inventoryInputs = document.querySelectorAll('.table-container tbody input');
+        const headerInputs = document.querySelectorAll('.table-container thead input'); // Inputs en el encabezado
+
+        if (saveButton) {
+            saveButton.addEventListener('click', () => {
+                let inventoryData = [];
+                let columnHeaders = [];
+
+                // Obtener los nombres de las columnas del thead
+                headerInputs.forEach(input => {
+                    columnHeaders.push(input.placeholder || input.value || 'sin_nombre');
+                });
+
+                // Recorrer las filas del tbody
+                const rows = document.querySelectorAll('.table-container tbody tr');
+                rows.forEach(row => {
+                    let rowData = {};
+                    const inputsInRow = row.querySelectorAll('input');
+                    inputsInRow.forEach((input, index) => {
+                        const header = columnHeaders[index] || `columna_${index}`; // Usar el nombre del encabezado
+                        rowData[header] = input.value;
+                    });
+                    inventoryData.push(rowData);
+                });
+
+                console.log('--- Inventario Guardado ---');
+                console.log(inventoryData);
+                alert('Inventario Guardado (¡pronto estará disponible esta función, por el momento tus datos se guardarán en la consola del navegador!)');
+            });
+        }
+
+        if (clearButton) {
+            clearButton.addEventListener('click', () => {
+                inventoryInputs.forEach(input => {
+                    input.value = '';
+                });
+                alert('¡Se va a limpiar y se borrarán todos los datos!');
+            });
+        }
+    </script>
+</body>
+</html>

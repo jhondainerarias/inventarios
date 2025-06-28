@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Inventaap: La mejor solución para optimizar tus inventarios. Agiliza, optimiza y facilita la gestión de stock.">
+    <meta name="keywords" content="html5, css3, javascript, inventario, stock, gestión, aplicación web, Inventaap, Jhon Dainer Arias">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INVENTAAP Inventarios</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Importar fuentes (asegúrate de que estén en tu HTML también) */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
+
+        /* --- General Body & Layout --- */
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Asegura que el body ocupe al menos toda la altura de la ventana */
+        }
+
+        .wrapper {
+            display: flex;
+            flex: 1; /* Permite que el wrapper se expanda y empuje el footer hacia abajo */
+            max-width: 1400px; /* Ancho máximo para el contenido principal */
+            margin: 0 auto; /* Centra el wrapper */
+            width: 100%;
+        }
+
+        /* --- Header Styles --- */
+        .main-header {
+            background-color: #2c3e50; /* Azul oscuro para el encabezado */
+            color: white;
+            padding: 15px 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: sticky; /* Sticky header */
+            top: 0;
+            z-index: 100; /* Asegura que esté por encima de otros elementos */
+            width: 100%;
+            box-sizing: border-box; /* Incluye padding en el ancho */
+        }
+
+        .header-main {
+            display: flex;
+            justify-content: center; /* Centra horizontalmente el contenido */
+            align-items: center; /* Centra verticalmente el contenido (opcional, depende de la altura) */
+            width: 100%;
+            max-width: 1400px; /* Ancho máximo para el contenido principal */
+            margin: 0 auto; /* Centra la sección dentro del header */
+            padding-bottom: 15px; /* Espacio antes del banner */
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px; /* Alineado con el wrapper */
+            margin: 0 auto;
+            justify-content: center; /* Centra los elementos internos (logo, h1, h2) */
+        }
+
+        .main-header .logo {
+            height: 50px; /* Tamaño del logo */
+            margin-right: 15px;
+            border-radius: 50%; /* Si quieres que el logo sea circular */
+            object-fit: cover;
+        }
+
+        .main-header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2em;
+            margin: 0;
+            /* flex-grow: 1; */ /* Removido para mejor centrado con h2 */
+        }
+
+        .main-header h2 {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.1em;
+            font-weight: 400;
+            margin: 0;
+            color: #ecf0f1;
+            margin-left: 15px; /* Espacio entre h1 y h2 */
+        }
+
+        /* Scrolling Banner */
+        .scrolling-banner {
+            width: 100%;
+            background-color: #3498db; /* Un azul más claro para el banner */
+            overflow: hidden;
+            white-space: nowrap;
+            box-sizing: border-box;
+            padding: 8px 0;
+            margin-top: 10px;
+        }
+
+        .scrolling-banner p {
+            display: inline-block;
+            padding-left: 100%; /* Empieza el texto fuera de la vista */
+            animation: scrollText 25s linear infinite; /* Ajusta la duración según el texto */
+            margin: 0;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        @keyframes scrollText {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* --- Sidebar (Left) --- */
+        .sidebar-left {
+            width: 250px;
+            background-color: #34495e; /* Gris azulado oscuro */
+            color: white;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+            flex-shrink: 0; /* Evita que se encoja */
+            position: relative; /* Para el posicionamiento del pseudo-elemento */
+        }
+
+        .sidebar-left h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5em;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #f39c12; /* Naranja para el título del menú */
+        }
+
+        .main-nav-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .main-nav-sidebar ul li {
+            margin-bottom: 10px;
+            position: relative; /* Para el efecto de subrayado/resaltado */
+        }
+
+        .main-nav-sidebar ul li a {
+            display: block;
+            padding: 12px 15px;
+            color: #ecf0f1; /* Texto blanco suave */
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+            border-radius: 5px;
+            position: relative; /* Para pseudo-elementos */
+            z-index: 1; /* Asegura que el texto esté sobre el fondo */
+        }
+
+        .main-nav-sidebar ul li a:hover {
+            background-color: #2c3e50; /* Azul oscuro al pasar el mouse */
+            transform: translateX(5px); /* Pequeño desplazamiento */
+        }
+
+        /* --- ESTILOS MEJORADOS PARA INVENTARIO --- */
+        .main-nav-sidebar ul li:first-child > a { /* Selecciona el primer <li> y su <a> directo (HACER UN INVENTARIO) */
+            background-color: #e67e22; /* Naranja vibrante para la opción principal de inventario */
+            color: white;
+            font-size: 1.1em;
+            padding: 15px 20px;
+            border-left: 5px solid #d35400; /* Borde más grueso para destacar */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px; /* Espacio debajo del botón principal */
+            position: relative;
+            overflow: hidden; /* Para la animación de brillo */
+        }
+
+        .main-nav-sidebar ul li:first-child > a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -75%;
+            width: 50%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: skewX(-20deg);
+            transition: all 0.7s ease;
+            z-index: 0;
+        }
+
+        .main-nav-sidebar ul li:first-child > a:hover::before {
+            left: 125%;
+        }
+
+        .main-nav-sidebar ul li:first-child > a:hover {
+            background-color: #d35400; /* Naranja más oscuro al hover */
+            transform: scale(1.02); /* Ligeramente más grande */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Sub-menú para inventarios */
+        .main-nav-sidebar ul ul {
+            margin-top: 5px;
+            margin-left: 15px; /* Indentación para sub-opciones */
+            border-left: 2px solid rgba(255, 255, 255, 0.2);
+            padding-left: 5px;
+        }
+
+        .main-nav-sidebar ul ul li a {
+            background-color: #4a6279; /* Un tono un poco más claro que el sidebar */
+            color: #ecf0f1;
+            padding: 10px 15px;
+            font-size: 0.95em;
+            font-weight: 400;
+            border-radius: 3px;
+            margin-bottom: 5px;
+        }
+
+        .main-nav-sidebar ul ul li a:hover {
+            background-color: #5d748f; /* Un poco más claro al hover */
+            transform: translateX(3px);
+        }
+
+        /* Info en el sidebar */
+        .sidebar-info {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-size: 0.9em;
+            color: #bdc3c7; /* Gris claro */
+        }
+
+        .sidebar-info h4 {
+            font-family: 'Montserrat', sans-serif;
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+
+        /* --- Main Content (Center) --- */
+        .page-content {
+            flex: 1; /* Permite que el contenido principal ocupe el espacio restante */
+            padding: 20px 30px;
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+            overflow-y: auto; /* Permite scroll si el contenido es muy largo */
+            border-radius: 8px; /* Aplicado directamente aquí si modern-style se usará siempre */
+            margin-left: 20px; /* Espacio a la izquierda del contenido principal */
+            margin-right: 20px; /* Espacio a la derecha del contenido principal */
+        }
+
+        /* Estilo para el contenido principal tipo "modern-style" */
+        .modern-style {
+            background-color: #ffffff;
+            border-radius: 8px; /* Esto estaba duplicado, se puede mover a .page-content */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Esto estaba duplicado */
+        }
+        
+        .content-box-inner {
+            /* Si necesitas padding interno o algo específico para el contenido dentro de page-content */
+            padding: 0; /* o algún valor */
+        }
+
+
+        .main-content-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .main-content-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .main-content-header h3 {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.2em;
+            color: #555;
+            font-weight: 400;
+        }
+
+        .features-section {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 40px;
+            margin-bottom: 50px;
+        }
+
+        .feature-item {
+            background-color: #ecf0f1; /* Gris claro */
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            flex: 1; /* Permite que los ítems se distribuyan */
+            min-width: 250px; /* Ancho mínimo para cada tarjeta */
+            max-width: 30%; /* Para 3 columnas */
+        }
+
+        .feature-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-item .icon {
+            font-size: 3em;
+            color: #3498db; /* Icono azul */
+            margin-bottom: 15px;
+            display: block; /* Para que el margin-bottom funcione */
+        }
+
+        .feature-item h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .feature-item p {
+            font-size: 0.95em;
+            color: #666;
+        }
+
+        .developer-info {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px dashed #ccc;
+            color: #555;
+            font-size: 1em;
+        }
+
+        .developer-info strong {
+            color: #2c3e50;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1em;
+        }
+
+        .quote-block {
+            background-color: #f0f8ff; /* Azul muy claro */
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 40px auto;
+            max-width: 700px;
+            font-style: italic;
+            color: #444;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-radius: 5px;
+        }
+
+        /* --- Sidebar (Right) --- */
+        .sidebar-right {
+            width: 250px;
+            background-color: #f8f9fa; /* Blanco grisáceo para el sidebar derecho */
+            padding: 20px;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.05);
+            flex-shrink: 0;
+        }
+
+        .sidebar-right h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3em;
+            color: #3498db; /* Azul para títulos */
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .contact-info p, .contact-info a {
+            font-size: 0.95em;
+            color: #555;
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            color: #3498db;
+            text-decoration: underline;
+        }
+
+        .whatsapp-button {
+            display: block;
+            background-color: #25d366; /* Verde WhatsApp */
+            color: white;
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .whatsapp-button:hover {
+            background-color: #1ea74d;
+            transform: translateY(-2px);
+        }
+
+        .sidebar-widget {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .sidebar-widget p {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* --- Footer Styles --- */
+        .main-footer {
+            background-color: #2c3e50; /* Mismo azul oscuro que el header */
+            color: white;
+            text-align: center;
+            padding: 20px 0; /* Ajusta el padding para que el contenido interno maneje los lados */
+            font-size: 0.85em;
+            margin-top: auto; /* Empuja el footer al final de la página */
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+            display: flex; /* Usamos flexbox para centrar el wrapper interno */
+            justify-content: center;
+        }
+
+        .footer-content-wrapper {
+            display: flex;
+            flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+            justify-content: space-around; /* Distribuye el espacio entre los elementos */
+            align-items: center; /* Alinea los elementos verticalmente en el centro */
+            max-width: 1200px; /* Ancho máximo para el contenido del footer */
+            width: 90%; /* Ocupa el 90% del ancho disponible */
+            padding: 10px 20px;
+            box-sizing: border-box;
+        }
+
+        .footer-info {
+            flex: 1; /* Permite que la información ocupe espacio flexible */
+            min-width: 280px; /* Ancho mínimo para la columna de info */
+            padding: 10px;
+            text-align: left; /* Alinea el texto a la izquierda dentro de su caja */
+            margin-right: 20px; /* Espacio entre la info y la caja de imagen */
+        }
+
+        .footer-info p {
+            margin: 5px 0;
+        }
+
+        .developer-name {
+            color: #f39c12; /* Naranja para el nombre del desarrollador */
+            font-weight: 700;
+        }
+
+        .footer-quote {
+            font-style: italic;
+            color: #bdc3c7;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+
+        .footer-image-box {
+            position: relative;
+            width: 250px; /* Ancho fijo para la caja de la imagen */
+            height: 150px; /* Alto fijo para la caja de la imagen */
+            overflow: hidden;
+            border-radius: 10px; /* Bordes redondeados */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Sombra más pronunciada para destacar */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin: 15px 0; /* Margen para asegurar espacio en móvil */
+        }
+
+        .footer-image-box:hover {
+            transform: translateY(-5px) scale(1.02); /* Efecto hover sutil */
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .footer-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Cubre el área manteniendo la relación de aspecto */
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .footer-image-box:hover .footer-image {
+            transform: scale(1.05); /* Zoom sutil al hover */
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); /* Capa oscura semitransparente */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0; /* Oculta el overlay por defecto */
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-image-box:hover .image-overlay {
+            opacity: 1; /* Muestra el overlay al hover */
+        }
+
+        .overlay-text {
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2em;
+            font-weight: 700;
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            transform: translateY(10px); /* Ligeramente hacia abajo */
+            transition: transform 0.3s ease;
+        }
+
+        .footer-image-box:hover .overlay-text {
+            transform: translateY(0); /* Sube a su posición al hover */
+        }
+
+        /* --- Responsive Design --- */
+        /* Menú Hamburguesa */
+        .menu-toggle {
+            display: none; /* Oculto por defecto en desktop */
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2em;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        @media (max-width: 1024px) {
+            .wrapper {
+                flex-direction: column; /* Apila el contenido y los sidebars */
+            }
+
+            .sidebar-left {
+                width: 100%;
+                position: fixed; /* Fijo en móvil */
+                height: 100%;
+                transform: translateX(-100%); /* Oculto por defecto */
+                z-index: 200; /* Por encima de todo */
+                box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
+                padding-top: 80px; /* Espacio para el header fijo */
+                box-sizing: border-box;
+            }
+
+            body.menu-open .sidebar-left { /* Corregido: .body.menu-open */
+                transform: translateX(0%); /* Muestra el menú al abrir */
+            }
+
+            .page-content, .sidebar-right {
+                margin-left: 0;
+                margin-right: 0;
+                width: 100%; /* Ocupa todo el ancho */
+                box-sizing: border-box;
+            }
+
+            .main-header .menu-toggle {
+                display: block; /* Muestra el botón hamburguesa */
+            }
+
+            .header-content {
+                justify-content: flex-start; /* Alinea el toggle y el logo a la izquierda */
+            }
+
+            .main-header h1 {
+                text-align: left;
+                margin-left: 10px; /* Espacio después del logo */
+            }
+
+            .main-header h2 {
+                display: none; /* Oculta el subtítulo en móviles para ahorrar espacio */
+            }
+
+            .sidebar-right {
+                order: 3; /* Asegura que el sidebar derecho vaya después del contenido principal */
+            }
+
+            .feature-item {
+                max-width: 45%; /* Dos columnas en tablets */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header h1 {
+                font-size: 1.8em;
+            }
+
+            .main-header .logo {
+                height: 40px;
+            }
+
+            .main-content-header h2 {
+                font-size: 2em;
+            }
+
+            .main-content-header h3 {
+                font-size: 1em;
+            }
+
+            .feature-item {
+                min-width: 90%; /* Una columna en móviles */
+                max-width: 90%;
+            }
+
+            .page-content {
+                padding: 15px;
+            }
+
+            /* Responsive adjustments for Footer */
+            .footer-content-wrapper {
+                flex-direction: column; /* Apila los elementos en pantallas pequeñas */
+                padding: 20px;
+            }
+
+            .footer-info {
+                margin-right: 0; /* Elimina el margen derecho */
+                text-align: center; /* Centra el texto en móvil */
+                margin-bottom: 20px; /* Espacio debajo de la info */
+            }
+
+            .footer-image-box {
+                width: 80%; /* Hace la imagen más ancha en móvil */
+                max-width: 300px; /* Limita el ancho máximo */
+                height: 180px; /* Ajusta la altura */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .scrolling-banner p {
+                animation: scrollText 15s linear infinite; /* Más rápido en pantallas muy pequeñas */
+            }
+
+            .sidebar-left {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            .main-nav-sidebar ul li a {
+                padding: 10px 10px;
+            }
+            .main-nav-sidebar ul li:first-child > a {
+                padding: 12px 15px;
+            }
+            .whatsapp-button {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <section class="header-main">
+            <div class="header-content">
+                <button class="menu-toggle" aria-label="Abrir menú">
+                    &#9776; </button>
+                <img src="imagenes/1.jpg" alt="Logo de Inventaap" class="logo">
+                <h1>APLICATIVO WEB INVENTAAP</h1>
+                <h2>Controla tu stock, optimiza tus procesos</h2>
+            </div>
+        </section>
+        <div class="scrolling-banner">
+            <p>¡Bienvenido a Inventaap! Tu solución inteligente para la gestión de inventario. Descubre nuestras nuevas características.</p>
+        </div>
+        </header>
+
+    <div class="wrapper">
+        <aside class="sidebar-left">
+            <h2>Menú Principal</h2>
+            <nav class="main-nav-sidebar">
+                <ul>
+                    <li>
+                        <a href="#">HACER UN INVENTARIO</a>
+                        <ul>
+                            <li><a href="nuevo.html">FORMATO NUEVO</a></li>
+                            <li><a href="generico.html">FORMATO GENERICO</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">INVENTARIOS GUARDADOS</a>
+                        <ul>
+                            <li><a href="#">Inventario 1 (Ejemplo)</a></li>
+                            <li><a href="#">Inventario 2 (Ejemplo)</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="STOCK.html"> ESTOK </a>
+                        </li>
+                    <li>
+                        <a href="prosimamente.html"> PRODUCTOS DISPONIBLES </a>
+                        <ul>
+                            <li><a href="ORDENES.HTML">PRODUCTOS AGOTADOS</a></li>
+                            </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-info">
+                <h4>Acerca de Inventaap</h4>
+                <p>Aplicación web creada por Jhon Dainer Arias como proyecto para la carrera de diseño de software.</p>
+            </div>
+        </aside>
+
+        <main class="page-content modern-style">
+            <div class="main-content-header">
+                <h2>Inventaap: Tu Gestión de Inventarios al Siguiente Nivel</h2>
+                <h3>Una Herramienta Poderosa que Facilita, Agiliza y Optimiza el Control de tu Stock.</h3>
+                </div>
+
+            <section class="features-section">
+                <div class="feature-item">
+                    <span class="icon">&#128221;</span> <h4>Facilidad de Uso</h4>
+                    <p>Diseñado para ser intuitivo, permitiendo a cualquier usuario gestionar inventarios sin complicaciones.</p>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">&#9200;</span> <h4>Optimización del Tiempo</h4>
+                    <p>Agiliza tus procesos, reduciendo horas de trabajo manual a solo unos clics.</p>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">&#128200;</span> <h4>Precisión y Control</h4>
+                    <p>Obtén una visión clara y precisa de tu stock, evitando pérdidas y optimizando ganancias.</p>
+                </div>
+            </section>
+
+            <div class="developer-info">
+                <p>Desarrollado con Pasión por:</p>
+                <p><strong>JHON DAINER ARIAS ®️, 2025</strong></p>
+            </div>
+
+            <blockquote class="quote-block">
+                <p>"La eficiencia en la gestión es la clave del éxito empresarial."</p>
+            </blockquote>
+        </main>
+
+        <aside class="sidebar-right">
+            <h4>Contacto</h4>
+            <div class="contact-info">
+                <a href="https://wa.me/573138094678?text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Inventaap." class="whatsapp-button" target="_blank">
+                    Haz clic aquí para WhatsApp
+                </a>
+                <p>Teléfono: 313 809 4678</p>
+                <p>Correo: <a href="mailto:jhondmusic@hotmail.com">jhondmusic@hotmail.com</a></p>
+            </div>
+            <div class="sidebar-widget">
+                <h4>Novedades</h4>
+                <p>Descubre las últimas actualizaciones de Inventaap y cómo te ayudan a gestionar mejor tu stock.</p>
+            </div>
+        </aside>
+    </div>
+
+    <footer class="main-footer">
+        <div class="footer-content-wrapper">
+            <div class="footer-info">
+                <p>&copy; 2025 Inventaap. Todos los derechos reservados.</p>
+                <p>Desarrollado con pasión por <strong class="developer-name">Jhon Dainer Arias</strong>.</p>
+                <p class="footer-quote">"Simplificando tu gestión, potenciando tu crecimiento."</p>
+            </div>
+            <div class="footer-image-box">
+                <img src="imagenes/1.jpg" alt="Imagen de inventario elegante" class="footer-image">
+                <div class="image-overlay">
+                    <span class="overlay-text">¡Tu stock, tu control!</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript para el menú hamburguesa
+        const menuToggle = document.querySelector('.menu-toggle');
+        const sidebarLeft = document.querySelector('.sidebar-left');
+        const body = document.body;
+
+        if (menuToggle && sidebarLeft) {
+            menuToggle.addEventListener('click', () => {
+                body.classList.toggle('menu-open');
+            });
+
+            // Opcional: Cerrar el menú si se hace clic fuera de él
+            body.addEventListener('click', (event) => {
+                if (body.classList.contains('menu-open') &&
+                    !sidebarLeft.contains(event.target) &&
+                    !menuToggle.contains(event.target)) {
+                    body.classList.remove('menu-open');
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
